@@ -1,1 +1,1 @@
-npm start
+npm install && clear && npm start && pause
