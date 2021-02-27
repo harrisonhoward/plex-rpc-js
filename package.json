@@ -1,0 +1,17 @@
+{
+  "name": "plex-rpc-js",
+  "version": "1.0.0",
+  "description": "Display a Rich Presence of your current watch session",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/index.js && pause"
+  },
+  "author": "Duck#9999",
+  "license": "MIT",
+  "dependencies": {
+    "discord-rpc": "^3.2.0",
+    "plex-api": "^5.3.1",
+    "plex-websocket": "^1.0.2",
+    "prompt-sync": "^4.2.0"
+  }
+}
