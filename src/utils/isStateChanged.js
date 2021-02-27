@@ -7,11 +7,11 @@ module.exports = (previous, next, stateUpdatedAt) => {
                     const timeDiff = parseInt(previous.viewOffset)
                         + (Math.round((Date.now() - stateUpdatedAt) / 1000) * 1000);
                     // If the time difference between the last state change is within
-                    // 1 second then don't change the state
+                    // 5 seconds then don't change the state
                     // This feature allows you to skip parts of the movie and have it show
                     if (timeDiff === parseInt(next.viewOffset)
-                        || (timeDiff + 1000) === parseInt(next.viewOffset)
-                        || (timeDiff - 1000) === parseInt(next.viewOffset)) {
+                        || (timeDiff + 5000) === parseInt(next.viewOffset)
+                        || (timeDiff - 5000) === parseInt(next.viewOffset)) {
                         return false;
                     } else if (previous.viewOffset === next.viewOffset) {
                         return false;
