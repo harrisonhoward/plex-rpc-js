@@ -1,3 +1,5 @@
+const log = require("./log");
+
 module.exports = media => {
     function getStart(viewOffset) {
         return Date.now() - viewOffset;
@@ -6,7 +8,7 @@ module.exports = media => {
     const type = media.type;
     switch (type) {
         case "movie": {
-            console.log(`Session updated - ${media.title} (${media.year})`);
+            log(`Session updated - ${media.title} (${media.year})`);
             const activity = {
                 details: media.title,
                 state: media.year,
@@ -25,7 +27,7 @@ module.exports = media => {
             return activity;
         }
         case "episode": {
-            console.log(`Session updated - ${media.grandparentTitle} (S${media.parentIndex} · E${media.index} - ${media.title})`);
+            log(`Session updated - ${media.grandparentTitle} (S${media.parentIndex} · E${media.index} - ${media.title})`);
             const activity = {
                 details: media.grandparentTitle,
                 state: `S${media.parentIndex} · E${media.index} - ${media.title}`,

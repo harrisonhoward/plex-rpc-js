@@ -1,3 +1,4 @@
+**A full rewrite of this program has begun. This is to ensure that it is optimised to it's best while being user friendly**
 # Discord Rich Presence for Plex
 *This program runs on [NodeJS](https://nodejs.org/en/download/) (Install LTS)*\
 This program is still in early development. If you have any bugs or cool features please leave them in ISSUES.\

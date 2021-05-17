@@ -9,6 +9,7 @@ const getMediaSession = require("./utils/getMediaSession");
 const getMediaSessionFromID = require("./utils/getMediaSessionFromID");
 const isStateChanged = require("./utils/isStateChanged");
 const mediaToActivity = require("./utils/mediaToActivity");
+const log = require("./utils/log");
 
 // Asynchronous tools available
 (async () => {
@@ -59,23 +60,22 @@ const mediaToActivity = require("./utils/mediaToActivity");
      * @type {object | false}
      */
     let currentMedia = false;
-    let updatedBefore = false;
     /**
      * @type {number | false}
      */
     let stateUpdatedAt = false;
 
-    console.log(`Finding server "${plexLoginDetails.address}${plexLoginDetails.port ? `:${plexLoginDetails.port}` : ""}"`);
+    log(`Finding server "${plexLoginDetails.address}${plexLoginDetails.port ? `:${plexLoginDetails.port}` : ""}"`);
     client.query("/").then(async (login) => {
-        console.log(`Server found "${login.MediaContainer.friendlyName}"\n`);
-        console.log("Connecting to server...");
+        log(`Server found "${login.MediaContainer.friendlyName}"\n`);
+        log("Connecting to server...");
         const WSClient = new WebsocketClient(client, onPacket);
         WSClient.websocket.on("connect", () => {
-            console.log("Connected to server\n");
-            console.log("Waiting for media to start playing...\n");
+            log("Connected to server\n");
+            log("Waiting for media to start playing...\n");
         });
         WSClient.websocket.on("error", err => {
-            console.log("Unexpected connection error:\n", err);
+            log("Unexpected connection error:\n", err);
         });
 
         currentMedia = await getMediaSession(client, plexLoginDetails);
@@ -95,7 +95,7 @@ const mediaToActivity = require("./utils/mediaToActivity");
                     if (media.state === "stopped"
                         && typeof currentMedia === "object") {
                         if (currentMedia.sessionKey == media.sessionKey) {
-                            console.log("Media stopped");
+                            log("Media stopped");
                             currentMedia = false;
                             rpc.clearActivity();
                         }
@@ -110,14 +110,8 @@ const mediaToActivity = require("./utils/mediaToActivity");
                             const stateUpdated = isStateChanged(currentMedia, media, stateUpdatedAt);
                             if (stateUpdated) {
                                 stateUpdatedAt = Date.now();
-                                updatedBefore = false;
                                 currentMedia = media;
                                 rpc.setActivity(mediaToActivity(currentMedia));
-                            } else {
-                                if (!updatedBefore) {
-                                    updatedBefore = true;
-                                    console.log("No session change detected");
-                                }
                             }
                             return;
                         }
