@@ -1,18 +1,20 @@
 {
   "name": "plex-rpc-js",
-  "version": "1.0.1",
-  "description": "Display a Rich Presence of your current watch session",
-  "main": "index.js",
+  "version": "2.0.0",
+  "description": "Plex to Discord RPC application created with NodeJS",
+  "main": "app/index.js",
   "scripts": {
-    "start": "node src/index.js && pause"
+    "start": "node app/index.js && pause"
   },
-  "author": "Duck#9999",
+  "author": "Harrison Howard",
   "license": "MIT",
   "dependencies": {
+    "@types/node": "^15.3.0",
     "discord-rpc": "^3.2.0",
+    "dotenv": "^9.0.2",
     "moment": "^2.29.1",
     "plex-api": "^5.3.1",
-    "plex-websocket": "^1.0.2",
+    "plex-websocket": "^1.0.3",
     "prompt-sync": "^4.2.0"
   }
 }

@@ -1,4 +1,3 @@
-**A full rewrite of this program has begun. This is to ensure that it is optimised to it's best while being user friendly**
 # Discord Rich Presence for Plex
 *This program runs on [NodeJS](https://nodejs.org/en/download/) (Install LTS)*\
 This program is still in early development. If you have any bugs or cool features please leave them in ISSUES.\
@@ -10,20 +9,20 @@ Program has been only tested on Windows 10 devices. If any issues with Linux or 
 
 ### Setup
 
-You need to make sure that your config is setup. Navigate to `src/CONFIG.js`
+This program comes with a setup tool for unexperienced people. Deleting **process.env** will start the tool.
+However, creating or modifying the process.env with your details will work as well.
 ```js
-module.exports = {
-    address: "", // Recommended to be the IP Address of the server
-    username: "", // Recommended to be the Email address used (Use checkUsers for your actual Username)
-    token: "", // Read below to find out how to get your token
-    https: false, // If you don't know what this is, then leave it as false
-    checkUsers: [""] // An array of usernames to check for (["Forbidden_Duck", "Duck"]) (this includes Managed Users)
-};
+ADDRESS='localhost' // Recommended to be the IP Address of the server
+# PORT=6001 // Not necessary unless you have a custom port
+USER='example@gmail.com' // Recommended to be the Email address used (Use checkUsers for your actual Username)
+TOKEN='' // Read below to find out how to get your token
+HTTPS=false // If you don't know what this is, then leave it as false
+CHECKUSERS=[""] // An array of usernames to check for (["Forbidden_Duck", "Duck"]) (this includes Managed Users)
 ```
 
 ### Start
 
-There has been 2 provided start files `windows-start.bat` and `sh-start.sh`\
+There has been 2 provided start files `windows-start.bat` and `start.sh`\
 If you are unable to run either of these files follow these steps
 
 1. Open terminal or command prompt
@@ -46,7 +45,7 @@ If you are unable to run either of these files follow these steps
 **IT GIVES POTENTIAL ATTACKERS ACCESS TO YOUR ACCOUNT**\
 *All our code is available for public eyes and does not maliciously use your token*
 ![Step5](https://i.imgur.com/UsAAgYR.png)
-6. Paste this in the respective "token" value in `CONFIG.js`
+6. Paste this in the respective "token" value in `process.env` or the setup tool
 
 ### Why do I choose token over passwords?
 I've tried using passwords with authenticators (you've probably seen, "enter the pin on screen at https://plex.tv/link"). This worked sometimes but not all the time. It was so unreliable I decided not to go with it.\

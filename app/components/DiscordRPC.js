@@ -1,12 +1,15 @@
 const DISCORD_RPC = require("discord-rpc");
 DISCORD_RPC.register("814789808849289227");
 
+const log = require("../utils/log");
+
 module.exports = class DiscordRPC {
     constructor() {
         this.RPC = new DISCORD_RPC.Client({ transport: "ipc" });
         this.RPC.login({ clientId: "814789808849289227" }).catch(console.error);
         this.currentActivity = false;
         this.ready = false;
+        this.timeToReady = 0;
         this.RPC.on("ready", () => {
             this.ready = true;
         });
@@ -20,13 +23,17 @@ module.exports = class DiscordRPC {
      * @returns {Promise<DiscordRPC>}
      */
     waitForReady() {
-        return new Promise(resolve => {
+        const intervalMS = 250;
+        return new Promise((resolve, reject) => {
             const intervalID = setInterval(() => {
+                this.timeToReady += intervalMS;
                 if (this.ready == true) {
                     clearInterval(intervalID);
                     resolve(this);
+                } else if (this.timeToReady === 10000) {
+                    reject(new Error("Failed to connect to Discord RPC"));
                 }
-            }, 500);
+            }, intervalMS);
         });
     }
 
