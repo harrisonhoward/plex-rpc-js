@@ -47,6 +47,7 @@ module.exports = class DiscordRPC {
     clearActivity() {
         if (this.currentActivity) {
             this.RPC.clearActivity();
+            this.currentActivity = undefined;
         }
     }
 }
