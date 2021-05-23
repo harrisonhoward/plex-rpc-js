@@ -81,8 +81,7 @@ module.exports = class PlexSession {
                     updatedCurrentMedia = await this.client.getMediaSessionFromID(this.currentMedia.sessionKey);
                 }
 
-                if ((stateMedia === undefined
-                    || stateMedia.media.playerState !== "playing")
+                if ((!stateMedia || stateMedia.media.playerState !== "playing")
                     && (!updatedCurrentMedia || updatedCurrentMedia.playerState !== "playing")) {
                     const checkUsers = (isEmptyArray(this.CONFIG.CHECKUSERS) // If CHECKUSERS is empty, use the username
                         ? [{ username: this.CONFIG.USERNAME, matches: [] }]
