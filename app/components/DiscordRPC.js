@@ -1,8 +1,6 @@
 const DISCORD_RPC = require("discord-rpc");
 DISCORD_RPC.register("814789808849289227");
 
-const log = require("../utils/log");
-
 module.exports = class DiscordRPC {
     constructor() {
         this.RPC = new DISCORD_RPC.Client({ transport: "ipc" });
