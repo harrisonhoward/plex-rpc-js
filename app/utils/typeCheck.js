@@ -40,7 +40,7 @@ module.exports = {
         return (
             typeof str === "string"
                 ? ["y", "n", "yes", "no"].includes(str.toLowerCase())
-                    ? str.toLowerCase() == "y" || str.toLowerCase() == "yes" // Execute twice, result is the same
+                    ? str.toLowerCase() == "y" || str.toLowerCase() == "yes"
                     : str.toLowerCase() == "true"
                 : str == "true"
         );
