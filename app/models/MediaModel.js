@@ -42,25 +42,24 @@ module.exports = class MediaModel {
      * @param {MediaModel} mediaToMatch 
      */
     static compareInstances(media, mediaToMatch) {
-        if (!(media instanceof MediaModel)
-            || !(mediaToMatch instanceof MediaModel)) {
-            return false;
-        }
-        if (media.type === "movie"
-            && mediaToMatch.type === "movie") {
-            if (media.title === mediaToMatch.title
-                && media.year === mediaToMatch.year
-                && media.userWatching === mediaToMatch.userWatching) {
-                return true;
-            }
-        } else if (media.type === "episode"
-            && mediaToMatch.type === "episode") {
-            if (media.title === mediaToMatch.title
-                && media.episodeNum === mediaToMatch.episodeNum
-                && media.seasonNum === mediaToMatch.seasonNum
-                && media.year === mediaToMatch.year
-                && media.userWatching === mediaToMatch.userWatching) {
-                return true;
+        if (media instanceof MediaModel
+            && mediaToMatch instanceof MediaModel) {
+            if (media.type === "movie"
+                && mediaToMatch.type === "movie") {
+                if (media.title === mediaToMatch.title
+                    && media.year === mediaToMatch.year
+                    && media.userWatching === mediaToMatch.userWatching) {
+                    return true;
+                }
+            } else if (media.type === "episode"
+                && mediaToMatch.type === "episode") {
+                if (media.title === mediaToMatch.title
+                    && media.episodeNum === mediaToMatch.episodeNum
+                    && media.seasonNum === mediaToMatch.seasonNum
+                    && media.year === mediaToMatch.year
+                    && media.userWatching === mediaToMatch.userWatching) {
+                    return true;
+                }
             }
         }
         return false;
