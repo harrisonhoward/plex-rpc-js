@@ -1,20 +1,20 @@
 {
-  "name": "plex-rpc-js",
-  "version": "2.0.0",
-  "description": "Plex to Discord RPC application created with NodeJS",
-  "main": "app/index.js",
-  "scripts": {
-    "start": "node app/index.js && pause"
-  },
-  "author": "Harrison Howard",
-  "license": "MIT",
-  "dependencies": {
-    "@types/node": "^15.3.0",
-    "discord-rpc": "^3.2.0",
-    "dotenv": "^9.0.2",
-    "moment": "^2.29.1",
-    "plex-api": "^5.3.1",
-    "plex-websocket": "^1.0.3",
-    "prompt-sync": "^4.2.0"
-  }
+    "name": "plex-rpc-js",
+    "version": "2.1.0",
+    "description": "Plex to Discord RPC application created with NodeJS",
+    "main": "app/index.js",
+    "scripts": {
+        "start": "node app/index.js && pause"
+    },
+    "author": "Harrison Howard",
+    "license": "MIT",
+    "dependencies": {
+        "@types/node": "^15.3.0",
+        "discord-rpc": "^3.2.0",
+        "dotenv": "^9.0.2",
+        "moment": "^2.29.1",
+        "plex-api": "^5.3.1",
+        "plex-websocket": "^1.0.3",
+        "prompt-sync": "^4.2.0"
+    }
 }
