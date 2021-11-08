@@ -1,10 +1,10 @@
 const DISCORD_RPC = require("discord-rpc");
-DISCORD_RPC.register("814789808849289227");
+DISCORD_RPC.register("895282820417724456");
 
 module.exports = class DiscordRPC {
     constructor() {
         this.RPC = new DISCORD_RPC.Client({ transport: "ipc" });
-        this.RPC.login({ clientId: "814789808849289227" }).catch(console.error);
+        this.RPC.login({ clientId: "895282820417724456" }).catch(console.error);
         this.currentActivity = false;
         this.ready = false;
         this.timeToReady = 0;
@@ -50,4 +50,4 @@ module.exports = class DiscordRPC {
             this.currentActivity = undefined;
         }
     }
-}
+};
