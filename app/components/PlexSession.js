@@ -21,8 +21,8 @@ const { isEmptyArray } = require("../utils/typeCheck");
 module.exports = class PlexSession {
     /**
      * @param {PlexMedia} client
-     * @param {DiscordRPC} rpc 
-     * @param {import("../config").CONFIG} CONFIG 
+     * @param {DiscordRPC} rpc
+     * @param {import("../config").CONFIG} CONFIG
      */
     constructor(client, rpc, CONFIG) {
         this.client = client;
@@ -36,18 +36,24 @@ module.exports = class PlexSession {
 
     /**
      * Packet function for websocket
-     * @param {*} type 
-     * @param {*} data 
+     * @param {*} type
+     * @param {*} data
      */
     async onPacket(type, data) {
         if (type === WebsocketClient.PACKETTYPES.PLAYING) {
-            if (data.PlaySessionStateNotification
-                && data.PlaySessionStateNotification.length > 0) {
+            if (
+                data.PlaySessionStateNotification &&
+                data.PlaySessionStateNotification.length > 0
+            ) {
                 const medias = [];
                 for (const media of data.PlaySessionStateNotification) {
-                    const session = await this.client.getMediaSessionFromID(media.sessionKey);
-                    if (media.state === "stopped"
-                        && this.currentMedia instanceof MediaModel) {
+                    const session = await this.client.getMediaSessionFromID(
+                        media.sessionKey
+                    );
+                    if (
+                        media.state === "stopped" &&
+                        this.currentMedia instanceof MediaModel
+                    ) {
                         if (this.currentMedia.sessionKey === media.sessionKey) {
                             const activity = this.mediaToActivity();
                             log(`Session stopped - ${activity.mediaName}`);
@@ -65,7 +71,7 @@ module.exports = class PlexSession {
                  */
                 let stateMedia;
                 // if currentMedia is matched from the packet session
-                medias.forEach(media => {
+                medias.forEach((media) => {
                     if (MediaModel.compareInstances(media, this.currentMedia)) {
                         const isStateChanged = this.isStateChanged(media);
                         if (isStateChanged !== undefined) {
@@ -78,34 +84,48 @@ module.exports = class PlexSession {
                 if (this.currentMedia) {
                     // Get an updated currentMedia
                     // If currentMedia is not playing, it gets overrided by a playing session
-                    updatedCurrentMedia = await this.client.getMediaSessionFromID(this.currentMedia.sessionKey);
+                    updatedCurrentMedia =
+                        await this.client.getMediaSessionFromID(
+                            this.currentMedia.sessionKey
+                        );
                 }
 
-                if ((!stateMedia || stateMedia.media.playerState !== "playing")
-                    && (!updatedCurrentMedia || updatedCurrentMedia.playerState !== "playing")) {
-                    const checkUsers = (isEmptyArray(this.CONFIG.CHECKUSERS) // If CHECKUSERS is empty, use the username
+                if (
+                    (!stateMedia ||
+                        stateMedia.media.playerState !== "playing") &&
+                    (!updatedCurrentMedia ||
+                        updatedCurrentMedia.playerState !== "playing")
+                ) {
+                    const checkUsers = isEmptyArray(this.CONFIG.CHECKUSERS) // If CHECKUSERS is empty, use the username
                         ? [{ username: this.CONFIG.USERNAME, matches: [] }]
-                        : []);
-                    if (Array.isArray(this.CONFIG.CHECKUSERS)) { // Convert all users
-                        this.CONFIG.CHECKUSERS.forEach(user => {
+                        : [];
+                    if (Array.isArray(this.CONFIG.CHECKUSERS)) {
+                        // Convert all users
+                        this.CONFIG.CHECKUSERS.forEach((user) => {
                             checkUsers.push({
                                 username: user,
-                                matches: []
+                                matches: [],
                             });
                         });
                     }
 
-                    medias.forEach(media => {
+                    medias.forEach((media) => {
                         checkUsers.forEach((user, index) => {
-                            if (typeof media.userWatching === "string"
-                                && media.userWatching.toLowerCase() === user.username.toLowerCase()) {
+                            if (
+                                typeof media.userWatching === "string" &&
+                                media.userWatching.toLowerCase() ===
+                                    user.username.toLowerCase()
+                            ) {
                                 checkUsers[index].matches.push(media);
                             }
                         });
                     });
-                    checkUsers.forEach(user => {
-                        if (user.matches.length > 0) { // first checkUser has priority
-                            const isStateChanged = this.isStateChanged(user.matches[0]);
+                    checkUsers.forEach((user) => {
+                        if (user.matches.length > 0) {
+                            // first checkUser has priority
+                            const isStateChanged = this.isStateChanged(
+                                user.matches[0]
+                            );
                             if (isStateChanged !== undefined) {
                                 stateMedia = isStateChanged;
                                 return;
@@ -119,26 +139,43 @@ module.exports = class PlexSession {
 
                     switch (stateMedia.changeType) {
                         case "type":
-                            log(`Session type changed to ${this.currentMedia.type} - ${mediaActivity.mediaName}`);
+                            log(
+                                `Session type changed to ${this.currentMedia.type} - ${mediaActivity.mediaName}`
+                            );
                             break;
                         case "playerState":
                             if (this.currentMedia.playerState === "playing") {
-                                if (previousCurrentMedia
-                                    && MediaModel.compareInstances(this.currentMedia, previousCurrentMedia)) {
-                                    log(`Session unpaused - ${mediaActivity.mediaName}`);
+                                if (
+                                    previousCurrentMedia &&
+                                    MediaModel.compareInstances(
+                                        this.currentMedia,
+                                        previousCurrentMedia
+                                    )
+                                ) {
+                                    log(
+                                        `Session unpaused - ${mediaActivity.mediaName}`
+                                    );
                                     break;
                                 } else {
-                                    log(`New session detected - ${mediaActivity.mediaName}`);
+                                    log(
+                                        `New session detected - ${mediaActivity.mediaName}`
+                                    );
                                     break;
                                 }
                             }
-                            log(`Session ${this.currentMedia.playerState} - ${mediaActivity.mediaName}`);
+                            log(
+                                `Session ${this.currentMedia.playerState} - ${mediaActivity.mediaName}`
+                            );
                             break;
                         case "viewOffset":
-                            log(`Session time changed - ${mediaActivity.mediaName}`);
+                            log(
+                                `Session time changed - ${mediaActivity.mediaName}`
+                            );
                             break;
                         default:
-                            log(`Session change detected - ${mediaActivity.mediaName}`);
+                            log(
+                                `Session change detected - ${mediaActivity.mediaName}`
+                            );
                             break;
                     }
                     this.lastStateUpdate = Date.now();
@@ -171,25 +208,29 @@ module.exports = class PlexSession {
                 if (this.currentMedia.type !== media.type) {
                     return {
                         media,
-                        changeType: "type"
+                        changeType: "type",
                     };
                 }
                 // Check if the player state (playing, paused, stopped) are the same
                 if (this.currentMedia.playerState !== media.playerState) {
                     return {
                         media,
-                        changeType: "playerState"
+                        changeType: "playerState",
                     };
                 }
                 if (this.currentMedia.playerState === "playing") {
                     // Check the time difference is greater or less than 30 seconds (Media view-time has changed)
-                    const timeDiff = parseInt(this.currentMedia.viewOffset)
-                        + (Math.round((Date.now() - this.lastStateUpdate) / 1000) * 1000);
-                    if ((timeDiff + 30000) <= parseInt(media.viewOffset)
-                        || (timeDiff - 30000) >= parseInt(media.viewOffset)) {
+                    const timeDiff =
+                        parseInt(this.currentMedia.viewOffset) +
+                        Math.round((Date.now() - this.lastStateUpdate) / 1000) *
+                            1000;
+                    if (
+                        timeDiff + 30000 <= parseInt(media.viewOffset) ||
+                        timeDiff - 30000 >= parseInt(media.viewOffset)
+                    ) {
                         return {
                             media,
-                            changeType: "viewOffset"
+                            changeType: "viewOffset",
                         };
                     }
                 }
@@ -197,7 +238,7 @@ module.exports = class PlexSession {
         } else {
             return {
                 media,
-                changeType: "playerState"
+                changeType: "playerState",
             };
         }
     }
@@ -218,7 +259,7 @@ module.exports = class PlexSession {
                 mediaName = `${this.currentMedia.title} (${this.currentMedia.year})`;
                 activity = {
                     details: this.currentMedia.title,
-                    state: this.currentMedia.year
+                    state: `${this.currentMedia.year}`,
                 };
                 break;
             }
@@ -228,7 +269,7 @@ module.exports = class PlexSession {
                     `(S${this.currentMedia.seasonNum} · E${this.currentMedia.episodeNum} - ${this.currentMedia.episode})`;
                 activity = {
                     details: this.currentMedia.title,
-                    state: `S${this.currentMedia.seasonNum} · E${this.currentMedia.episodeNum} - ${this.currentMedia.episode}`
+                    state: `S${this.currentMedia.seasonNum} · E${this.currentMedia.episodeNum} - ${this.currentMedia.episode}`,
                 };
                 break;
             }
@@ -246,7 +287,7 @@ module.exports = class PlexSession {
         activity.instance = false;
         return {
             mediaName,
-            activity
+            activity,
         };
     }
 };
