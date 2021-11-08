@@ -219,14 +219,14 @@ module.exports = class PlexSession {
                     };
                 }
                 if (this.currentMedia.playerState === "playing") {
-                    // Check the time difference is greater or less than 30 seconds (Media view-time has changed)
+                    // Check the time difference is greater or less than 10 seconds (Media view-time has changed)
                     const timeDiff =
                         parseInt(this.currentMedia.viewOffset) +
                         Math.round((Date.now() - this.lastStateUpdate) / 1000) *
                             1000;
                     if (
-                        timeDiff + 30000 <= parseInt(media.viewOffset) ||
-                        timeDiff - 30000 >= parseInt(media.viewOffset)
+                        timeDiff + 10000 <= parseInt(media.viewOffset) ||
+                        timeDiff - 10000 >= parseInt(media.viewOffset)
                     ) {
                         return {
                             media,
